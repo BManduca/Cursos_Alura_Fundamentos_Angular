@@ -1,0 +1,28 @@
+<!--
+  quando queremos exibir o valor de uma propriedade do componente dentro da tag de conteúdo
+  para o data binding usamos, por exemplo: 
+  <h1> {{ title }} </h1>
+  <img src="" alt="">
+
+
+  Mas quando queremos realizar o Data binding de um atributo HTML, isto ocorrerá de outra maneira — 
+  teremos que envolvê-lo em colchetes. E então, setaremos seus valores como o nome do 
+  componente correspondente:
+  <h1> {{ title }} </h1>
+  <img [src]="url" [alt]="title">
+
+  Assim, ao salvarmos e voltarmos ao navegador, teremos o título e a imagem sendo exibidas na página.
+  O que acabamos de fazer é denominado One Way data binding ou "Data binding unidirecional", 
+  isto porque os dados saem do componente, da fonte de dados e vão para o template, no entanto
+  não fazem o caminho contrário ou de volta...é bem importante frisar essa parte.
+
+
+  img-thumbnail -> classe do bootstrap com caracteristicas responsivas.
+
+-->
+
+<ap-photo 
+    *ngFor="let photo of photos" 
+    [url]="photo.url" 
+    [description]="photo.description">
+</ap-photo>

@@ -1,0 +1,1766 @@
+AluraPic -> sistema de gestão de fotos , que será o projeto tratado nesta parte do curso
+
+fundamentos -> aprender a organziar o projeto de uma maneira profissional, 
+criar componentes, diretivas, aprender a lidar com rxjs para o benefício da nossa aplicação...
+
+" bem começado..metade feito.. "
+
+Será desenvolvido uma aplicação através do Angular CLI -> uma ferramenta endossada pela própria equipe do Angular.
+entratanto, para que possa ser utilizada, é necessário ter a instalação da plataforma Node.js 8.X em nossa infraestrutura
+de desenvolvimento.
+
+A plataforma Node.js é apenas um requisito de desenvolvimento, não quer dizer que o produto final, o aplicativo, 
+deva rodar em um servidor Node.js. A aplicação final pode ser hospedada em qualquer servidor estático, 
+independente da tecnologia utilizada.
+
+O Node.js é um ambiente JavaScript multiplataforma disponível para linux, Mac e windows.
+
+instalação Linux: 
+ - através do terminal, executaremos o comando: sudo apt-get install -y nodejs
+
+ - em algumas distribuições linux, pode haver um conflito de nomes quando o Node é instalado pelo 
+ apt-get. Neste caso específico, no lugar do binário ser node, ele passa a se chamar nodejs. 
+ Isso gera problemas pois, como a instrução npm start procura o binário node e não nodejs, ela
+ não funcionará. Para resolver, usa a seguinte instrução para subir o servidor: 
+     - nodejs server
+
+    ou ainda no ubuntu:
+     - sudo ln -s /usr/bin/nodejs /usr/bin/node
+
+    depois, o comando npm start funcionará como esperado.
+
+
+
+instalação Node.js no Mac
+
+o homebrew é a maneira mais recomendada para instalar o Node.js, por meio do comando:
+
+     - brew update
+     - brew install node
+
+Editor -> VisualStudio
+É um dos editores mais recomendados, um editor gratuito criado pela Microsoft e 
+disponivel para windows, linux e Mac. Sua integração com TypeScript é realizada
+sem qualquer esforço e sem configurações adicionais.
+
+o Angular foca em evergreen browsers, isto é, suposrtará sempres as duas 
+últimas versões vigentes dos navegadores do mercado. Por Exemplo, se a última versão
+do Chrome é 65, ele suportará esta versão e a anterior, apenas.
+Isso significa que uma versão mais nova de Angular deixará de funcionar na 
+antepenúltima versão do navegador. A equipe do Angular simplesmente removerá os testes
+de integração para navegadores não suportados.
+
+Todavia, se a aplicação está fortemente vinculada a uma versão específica de um navegador, 
+talvez essa característica do framework não se coadune com a estratégia.
+
+
+
+Aula 01 - Angular CLI, instalação e criação do projeto
+
+ - Acessar o site do Angula CLI ou 'Command Line Interface', esse client de linha de comando 
+ do Angular, que hoje é totalmente patrocionado pela equipe do Angular, ele é um projeto
+ que ajuda o desenvolvedor a partir do 0 um projeto, sem se preocupar com toda a infraestrutura
+ para criação do projeto, basta execução de um único comando para que o comando seja criado.
+
+ - verificando a versão do node -> mpm -v ou --version
+ - 'pedir' ao npm para dar um install globalmente ou seja que esta 
+ ferramenta do Angular CLI esteja disponível em qualquer diretório da minha aplicação 
+  -> comando: npm install -g @angular/cli
+  -> criando um projeto em angular: ng new "nome do projeto"
+  -> entrar dentro do projeto criado: ng serve --open => rodando no servidor 
+
+  -> mesmo tendo instalado as versões solicitadas pelo professor do node.js e do 
+  Angular pode acontecer um erro causado pela biblioteca RxJS:
+
+  ERROR in node_modules/rxjs
+
+  -> Nesse caso executar o comando abaixo na raiz do projeto e reinstalar RxJS na 
+  versão 6.0.0
+
+  npm install rxjs@6.0.0 --save
+
+  -> Depois tentar rodar o servidor:
+
+  ng serve --open
+
+
+
+Aula 09 - Entendendo a estrutura
+
+O Visual Studio se integra muito bem a linguagem pelo Angular, que é o TypeScript. 
+Mas onde é que se localiza a página gerada anteriormente, com "Welcome to app!", em nosso 
+projeto? Neste painel lateral, não há nenhum index.html, e o importante, neste momento, 
+é que todo código que diz respeito à aplicação está dentro de "src"(de source), 
+inclusive o index.html.
+
+Ao abrir o index.html, que é a página padrão criada pelo servidor local configurado pelo 
+Angular CLI. Entretanto, a página do navegador(localhost:4200) possui uma imagem, lista de links, 
+entre outros elementos que não aparecem no código de index.html. Além disso, o conteúdo
+dentro das tags <body> são tags que nem existem no mundo HTML, <app-root>.
+
+Em Angular, tudo é componente, capaz de guardar um comportamento, o CSS e a marcação HTML,
+a estrutura, em um único local. Assim, a página localhost:4200 não é diferente no Angular, já
+que uma página também é um componente, possui HTML, CSS e caso haja, JavaScript, tudo vinculado
+em um único objeto denominado componente, Assim <app-root> indica a existência de componentes.
+
+Mas aonde estão os componentes, dentro do nosso?
+
+Tudo que for sendo criado, ficará dentro de "app", em que há app.component.ts.
+Ao abrir, veremos que, basicamente, temos uma classe do ECMAScript 6, com um Decorator anotado
+com @Component, o qual torna a classe um componente. o Decorator é uma sintaxe especial do Angular, 
+do TypeScript, em que é possível incluir uma metainformação sobre uma determinada classe, no caso.
+
+
+
+Mas... o que é uma metainformação??
+Ao criarmos instância dessa classe, criamos objetos. Estamos incluindo mais uma informação desta classe, que diz
+respeito ao framework. Então, a classe AppComponent só é um componente porque está anotada com @Component. Nele 
+existe um selector: 'app-root', mesmo nome encontrado em index.html.
+
+Esse selector nos permite utilizar o componente em templates em sua forma declarativa, então, todo o conteúdo
+de app.component.ts, sua apresentação, o que ele faz, seu CSS, são acessados por meio dele. Também Neste
+arquivo, há templateUrl: './app.component.html', que informa a apresentação deste componente.
+
+Se abrirmos app.component.html, encontraremos o código referente à apresentação que vemos na página do 
+navegador. Então, o Angular carregará, exibindo componente, e seu template. Voltando a app.component.ts,
+o styleYrls:['./app.component.css'] informa onde se localiza o CSS utilizado por este componente.
+
+Quando uma aplicação Angular é carregada pela primeira vez, sabemos que é o 'app-root' que vai ser carregado, pois, 
+esse cara na sua forma declarativa no selector que se encontra no index..
+
+mas como o Angular consegue 'pegar' toda essa informação e transformar em algo que o navegador consiga carregar e 
+entender? Por debaixo dos panos, o Angular utiliza o WebPack, que é um module bundle, isto é, um empacotador de 
+módulos famoso, utilizado por Create React App, Vue CLI e outros frameworks SinglePage Application. 
+
+
+Aula 10 - Primeiro contato com Data Binding
+
+Vamos se atentar para o título que aparece na página da aplicação: "Welcome to App"... Ao voltarmos ao 
+nosso template, e procurarmos o template do componente que sabemos que é carregado, aap.component.html, veremos 
+Welcome to {{ Title }}, porém, não é "title" que lemos na tela e sim, "app".
+
+O Angular se tornou famoso na época emq ue foi lançado, por causa de um recurso chamado Data Binding, ou 
+"Associação de Dados". Assim como em app.component.ts há title = 'app', existe uma propriedade no component 
+chamada title. A fonte é a propriedade do nosso componente, e seu valor é app.
+
+O Data binding implica em um Associação de dados com uma fonte de dados que, no nosso caso, está no componente, 
+com seu template (nomenclatura do Angular), ou view. Nele, quando encontramos esta sintaxe chamada de Angular 
+Expressions (AE), e quando o Angular for renderizar este template do componente, ele se deparará com uma lacuna,
+que neste caso está apontando para a propriedade title.
+
+Esta propriedade existe apenas em app.component.ts, então o Angular acessará seu valor e o jogará no template. 
+Isso é interessante pois para realizarmos uma mudança dessas em JavaScript, tradicionalmente, precisamos manipular o 
+DOM, realizando o document.querySelector(), selecionando o elemento e mudando o textContent.
+
+A ideia do Angular com Data binding é justamente evitar perda de tempo manipulando o DOM, e que 
+possamos fazer algo que realmente vá agregar ao nosso cliente. Sendo assim, trocarmos app por alurapic 
+em app.component.ts, e salvarmos o projeto em si, sabemos que o novo valor para o template será outro.
+
+Teríamos que recarregar a página no navegador, porém, ao abrirmos a página, a mudança, já estará feita.
+Esta é uma vantagem fantástica do Angular CLI: qualquer alteração na aplicação é feita instantaneamente no navegador.
+Isso é perfeito, para quando se trabalha com dois monitores, pois, em um vamos desenvovler e no outro podemos 
+verificar as modificações que estão sendo feitas.
+
+
+Aula 11 - Adequando o template gerado e mais data binding
+
+Ao abrir o terminal e acessarmos nossa área de trabalho e logo em seguida a pasta alurapic, realizamos 
+a inicialização da aplicação com ng serve --open, que a abrirá no browser automaticamente.
+
+Sendo assim, a aplicação passa a arodar em um servidor local disponibilizado pelo Angular CLI. 
+Então, poderemos abrir o VisualStudio Code, que estará com a pasta do projeto aberta.
+A idéia principal aqui é que o primeiro componente a ser carregado pela nossa aplicação
+seja o <app-root>, que equivale ao app.component.ts,e sua apresentação está em templateUrl, que é ./app.component.html,
+pasta em que se encontra o arquivo .ts
+
+Ao abrir o app.component.html e deletar todo o conteúdo, salvando logo em seguida...e voltarmos a acessar o 
+navegador, teremos uma página inteiramente em branco, já que não há nada no template do componente.
+Ao adicionar uma tag <img> cujo source(src) poderá ser uma imagem qualquer...
+
+Sendo assim, a página, irá exibir a imagem passada como parâmetro...como estabelecido..
+Por ora, não há nada de sotisficado no Angular, porém, cada vez ficará mais complexo, de acordo 
+com tudo que for sendo aplicado.
+
+para necessariamente fazermos um data binding e que o componente no qual este template está associado
+forneça os dados para o template, criaremos em app.component.ts uma propriedade com descrição 'Black Panther' e outra
+url, cujo o valor será o link da imagem que iremos incluir:
+
+    export class AppComponent {
+      title = 'alurapic';
+      description = 'Black Panther';
+      url = 'https://i.pinimg.com/564x/06/75/91/06759138c713c94de966852b834a0f81.jpg';
+    }
+
+
+feito esse trecho, será preciso remover os valores de app.component.html para de fato realizarmos o 
+Data binding:
+
+<img src="" alt="">
+
+Ao voltar para o navegador, não estará sendo exibido nada, justamente porque ainda não foi 
+passado o src e nem o alt. A primeira reação é que queremos usar um Angular Expression, porém, não 
+faremos isso. Este comportamento é utilizado quando temos o conteúdo de uma tag e queremos exibir o valor 
+de uma propriedadedo do componente dentro da tag de conteúdo.
+
+<h1>{{ title }}</h1>
+<img src="" alt="">
+
+Mas quando queremos realziar um data Binding de um atributo HTML, isto ocorre de outra maneira - 
+teremos que envolvê-lo em colchetes. E então, setaremos seus valores como o nome do componente correspondente:
+
+<h1>{{ title }}</h1>
+<img [src]="url" [alt]="title">
+
+Assim, ao salvarmos e voltarmos ao navegador, teremos o título e a imagem sendo exibidas na página.
+O que acabamos de fazer é denominado One Way data binding ou "Data binding unidirecional", 
+isto porque os dados saem do componente, da fonte de dados e vão para o template, no entanto
+não fazem o caminho contrário ou de volta...é bem importante frisar essa parte.
+
+Ao usarmos os colchetes, a url e o title se tornam expressões que o Angular sabe que precisa 
+buscar no componente ao qual o template está associado. Se deixarmos sem os colchetesm uma vez que não fazemos 
+Data Binding, isto é, não avaliamos uma expressão, o valor de src será a string url, enquanto o de alt
+será o texto title e não o valor de title.
+
+Então, agora podemos realizar Data binding com atributos HTML do nosso component, através dos [], e quando
+formos exibir um valor de uma tag ou isoladamente, usaremos uma Angular Expression.
+
+Aula 13 - Convenções de código
+
+Focando na nomenclatura dos arquivos criados pelo Angular CLI, temos, por Exemplo
+app.component.ts. O nome do arquivo em si vem com .ts, no qual é programado o componente todo em 
+lower casem, ou seja, em caixa baixa, seguido por .component. Trata-se de uma Convenção que não pode deixar
+de ser seguida.
+
+para criar, por exemplo um menubar.component.ts e no nome do menu, utilizarmos Pascal Case, irá ficar 
+MenuComponent, mesma definição que ocorre em Java, C# e afins. Outro exemplo, é que caso o nome do 
+componente seja exemplo2, usaremos exemplo2.component.ts, e o nome da classe será Exemplo2Component.
+
+O template segue a mesma regra... o template do componente possui uma url, que precisa ser o mesmo 
+nome do arquivo .ts, porém, sua extensão é .html, claro, para deixar a identificação muito clara e bem 
+definida. O Mesmo ocorre com o arquivo .css
+
+
+
+Resumão:
+ ok - Instalação do Angular CLI
+ ok - Criação de um novo projeto com a ferramenta e como executá-lo
+ ok - Compreensão da estrutura criada
+ ok - Data binding através de Angular Expression
+ ok - Data binding de atributos
+ ok - Convenções adotadas até o momento
+
+
+ Cap 02 - Criando primeiro componente
+
+ 01 - Adicionando Bootstrap ao projeto
+
+ Para carregar/importar o CSS no Angular de maneira global como o Bootstrap, Normalize, CSS Reset ou outro 
+ similar, não é simplesmente abrir o index.html e incluir a tag <link> do Bootstrap, isto porque 
+ esses arquivos CSS precisam estar no processo de build, de construção da aplicação, tanto no ambiente 
+ de desenvolvimento quanto no ambiente de produção.
+
+ E se incluirmos a tag diretamente no código, o Angular CLI não saberá que isto é uma dependência da aplicação, 
+ e que ele precisa entrar neste processo de construção. Este termo pode soar estranho para quem 
+ já está familiarizado com uma aplicação tradicional: o Angular CLI pode acessar o CSS e transformá-lo em 
+ um único código JavaScript ou então separar o arquivo .css. Então, ele precisa saber onde se encontra
+ o arquivo CSS, e isto não se dá por meio da tag <link>
+
+  -> Qual lugar carregamos o CSS ou scripts globais?
+    No caso , como já estamos falando sobre o css, há um arquivo em "Alurapic" chamado angular.json,
+    com uma série de configurações que dizem respeito ao build do projeto, tanto que no meio dela há
+    chaves referentes a styles e scripts. Estas propriedades servem inicialmente para carregarmos em styles
+    todos os CSSs globais da aplicação, ou seja, os que serão aplicados em todos os componentes, bem como 
+    os scripts globais , os quais não pertencem a nenhum componente específico.
+
+  No nosso caso, já existe /srcstyles.css em styles, o que significa que o programa busca dentro da pasta "src"
+  o arquivo styles.css. No entanto, agora precisamos carregar o Bootstrap e para tal precisamos baixá-lo, e indicar
+  o caminho onde se localiza este arquivo, Mas não precisaremos acessar o site e baixá-lo dali. Já que estamos 
+  utilizando o gerenciador de pacotes do Node para o Angular CLI funcionar, poderemos utilizá-lo para baixar todas
+  as dependências de front end que a aplicação irá precisar.
+  Se caso precisarmos usar JQuery, Bootstrap, Foundation e afins, conseguimos baixá-los pelo terminal.
+
+  se caso o o Angular CLI estiver rodando, precisamos parar o mesmo... 
+  ai realizamos o comando de instalação dentro da pasta do projeto 
+  -> /home/brunnomanduca/Documents/repositorios_git/Cursos_Alura/Angular/alurapic
+
+  comando: npm install bootstrap@4.4.1
+
+  após aplicar o comando, o repositorio será acessado, o Bootstrap será acessado e a dependência do nosso projeto será 
+  incluído em package.json. Todo projeto em Node possui este arquivo, que lista todas as dependências e módulos que 
+  foram baixados pelo npm.
+
+  antigamente era necessário acrescentarmos --save ou -S ao fim do comando para que o arquivo fosse devidamente listado
+  no arquivo package.json. Entretanto, já que estamos utilizando a versão mais recente ou superior do Node (versão 8, 
+  no caso a 10), não será necessário, pois a dependência é adicionado á listagem automaticamente.
+
+  O bootstrap se encontra em node_modules > bootstrap > dist > css, porém, como carregamos em nossa aplicação?
+
+  O mesmo precisará fazer parte de uma lista de CSS's globais que o Angular CLI levará em consideração em tempo
+  de construção da aplicação em si, seja ela para rodar em desenvolvimento ou produção. 
+  Esta indicação é feita em angular.json, que possui uma chave denominada build, dentro do qual está em styles.
+  
+  Será preciso alterar e salvar seu conteúdo para iniciar o caminho completo do Bootstrap na pasta "node_modules"
+
+  "styles": [
+    "src/styles.scss",
+    "./node_modules/bootstrap/dist/css/bootstrap.min.css"
+  ],
+  "scripts": []
+
+
+  Dentro do "src" já existia um arquivo styles.css, que se encontra totalmente vazio. O importante é entendermos que, 
+  ao alterarmos angular.json, somos obrigados a fechar e reabrir o angular CLI para que a modificação seja efetiva.
+  Se o Bootstrapfor carregado de maneira correta, no navegador, a foto do title "alurapic" será alterada.
+
+  No terminal, tendo o Angular CLI pausado, usaremos o comando 
+  ng serve --open para que se abra uma nova aba que carrega o bootstrap e veremos a modificação no navegador. 
+  Com isso, partiremos para a melhoria na responsividade, já que a imagem não diminui conforme diminuímos a página.
+
+  Vamos voltar ao Visual Code, abrir o template app.component.html, que exibe uma tag <img> apontando para uma url
+  e um title, que vêm do próprio app.component.ts, e então acrescentaremos a classe do Bootstrap, img-thumbnail:
+
+  <h1> {{ title }} </h1>
+  <img class="img-thumbnail" [src]="url" [alt]="title">
+
+  desta forma, ao retornar ao navegador e redimensionar a página, veremos que a imagem irá se adequar ao redimensionar
+  de qualquer forma a página, provando assim que o bootstrap está funcionando.
+
+
+
+02 - Criando primeiro componente
+
+A idéia é criar o primeiro componente que ocultará a complexidade de se criar uma imagem responsiva do Bootstrap.
+A convenção responsiva é, em "app", criando assim uma nova pasta chamada "photo", nome que diz 
+respeito ao componente que queremos criar. Nesta pasta, criaremos o arquivo photo.component.ts, do TypeScript, 
+que terá um arquivo de mesmo nome, porém, com extensão .html. Sabemos que um componente em TypeScript também é uma 
+classe em Angular.
+
+Em photo.component.ts, usaremos @Component, e o Visual Code exibirá, dentre outras, a opção de autoimport, que selecionarmos, 
+pressionando "Enter". Isso fará com que o programa importe automaticamente o decorator Component do módulo @angular/core,
+pois toda classe e decorator que for importado deverá ser informado - como em um import em Java, C#, ECMAScript e 
+por ai segue...
+
+import { Component } from '@angular/core';
+
+@Component
+export class PhotoComponent {}
+
+
+Caso passarmos o mouse sobre o Component, uma vez que o Visual Code é integrado ao TypeScript, ele nos avisa que 
+precisamos passar uma configuração especial para o Component. Portanto, passaremos chaves para indicar a existência
+de um objeto JavaScript, cuja propriedade é selector.
+
+Também informaremos que o nome do componente é ap-photo, e incluiremos um template, não diretamente no HTML e sim
+em um arquivo separado. Portanto é utilizado a opção templateUrl.
+
+
+import { Component } from '@angular/core';
+
+@Component({
+    selector: 'ap-photo',
+    templateUrl: 'photo.component.html'
+})
+export class PhotoComponent {}
+
+Prefixar todos os componentes é uma boa prática.
+Supondo que seja criado um componente chamado "photo", haverá conflito de seletores. Neste Caso, será utilizado
+"ap" para remeter a "alurapic".
+
+
+Quando o template for renderizado, será carregado uma imagem cuja class recebe img-thumbnail e realizaremos
+um Data binding da propriedade src com sua url e alt com description. Em photo.component.html, teremos:
+
+<img class="img-thumbnail" [src]="url" [alt]="description">
+
+através disso, a URL do component será lida, bem como a propriedade description do mesmo. Feito isso, no template de
+app.component.html, que se encontra vazio, já que queremos usar o nosso componente em um template de outro, 
+é necessário utilizarmos seu selector, sua forma declarativa:
+
+<ap-photo></ap-photo>
+
+
+
+04 - Declarando o componente no módulo da aplicação
+
+o "ap-photo" através do Angular já nos da uma pista que é um elemento desconhecido. 
+
+O primeiro ponto que o programa pede para verificar é se de alguma forma ele faz parte de
+um módulo, caso seja um comnponente do Angular(Isto porque um componente de maneira obrigatória
+precisa fazer parte de um módulo)
+
+Agora, em se tratando de componentes, para o Angular um módulo é uma maneira de agruparmos 
+componentes afins. Supondo que iremos criar um Data Table, formada por vários componentes - 
+cabeçalho da tabela, rodapé, coluna e por ai vai. Isso tudo se relaciona a um único Data Table, 
+sendo assim, poderemos ter um módulo na aplicaçao, no qual será agregado todos estes componentes.
+
+Se houver outra parte do aplicação que queira usar o Data table, basta ele importar este módulo.
+Isso fará com que todos os outros componentes necessários para o Data table também sejam importados. 
+Se não tivermos um módulo, caso ele queira utilizar o Data table, terá que importar todos eles
+de maneira individual.
+
+o módulo, então, é uma forma de organizar a nossa aplicação. Por ora, ela só possui um módulo, 
+app.module.ts, o primeiro a ser carregado. Ao abrir o arquivo, iremos perceber que ele importa 
+AppComponent. No template correspondente, queremos utilizar o componente PhotoComponent.
+
+
+É necessário declarar o componente dentro deste módulo:
+
+| -------------------------------------------------------------------- |
+
+//primeiro os imports do angular
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
+
+//segundo os imports que estamos criando
+import { AppRoutingModule } from './app-routing.module';
+import { PhotoComponent } from './photo/photo.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    PhotoComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+| -------------------------------------------------------------------- |
+
+portanto, vem primeiramente os imports de tudo que foi criado pelo Angular, e logo em seguida os
+nossos imports.
+Trata-se de uma convenção proveniente do site do Angular. Assim, estando o PhotoComponent em 
+declarations, o componente será acessível para o AppComponent, ou seja, se eles fazem parte 
+do mesmo grupo, um será 'enxergado' pelo outro.
+
+
+
+
+05- Inbound properties: passando dados para o componente
+
+problema de termos duas imagens (componentes PhotoComponent), sendo que queremos que cadaum tenha informações 
+independentes, distintas e específicas. Em app.component.html, então, queremos passar título e descrição diferentes
+para cada um dos <ap-photo>. Atualmente este dado está em photo.component.ts, e o resultado que esperamos 
+será assim:
+
+<ap-photo 
+url="https://i.pinimg.com/564x/06/75/91/06759138c713c94de966852b834a0f81.jpg" 
+description="Black Panther"></ap-photo>
+
+<ap-photo 
+url="https://centralvingadores.com.br/wp-content/uploads/2018/02/
+Pantera-Negra-Diretor-do-filme-fala-sobre-final-alternativo-e-as-Joias-do-Infinito-750x536.jpg" 
+description="Pantera Negra Desenho"></ap-photo>
+
+
+O segundo componente esta com uma imagem qualquer, e o primeiro está com a mesma imagem de antes - 
+assim, podemos tanto o valor de description quanto o da url em photo.component.ts, sem esquecermos de 
+salvar os arquivos. Pela lógica, PhotoComponent desconhece os valores de description e url, então, se acessarmos 
+app.component.html, indicaremos quais são estes valores.
+
+Entretanto, se voltarmos ao navegador, nada é exibido. Isso ocorre porque em nenhum momento incluímos 
+estes valores nas propriedades de photo.component.ts ao colocarem url e description de componentes distintos.
+Assim, quando o PhotoComponent for realizar o Data binding, ele lerá valores de url e descriptionque estão
+em branco.
+
+O que acontece é que precisamos de alguma forma explicitar que tais propriedades podem receber um parâmetro
+externo, passando um valor por meio da forma declarativa do componente. Caso isto não ocorra, estes valores nunca
+cairão em suas respectivas propriedades. Para isso, incluiremos @Input(), que faz parte do @angular/core e o programa
+apontará um erro porque precisamos importá-los. Basta clicar nele e no ícone de uma lupa que aparecerá e então o 
+import será feito:
+
+| ------------------------------------------------------------- |
+
+import { Component, Input } from '@angular/core';
+
+@Component({
+    selector: 'ap-photo',
+    templateUrl: 'photo.component.html'
+})
+export class PhotoComponent {
+
+    @Input() description = '';
+    
+    @Input() url = '';
+
+}
+
+| ------------------------------------------------------------- |
+
+Desta forma, indicamos que description e url são Inbound properties, ou seja, aceitam receber um valor, por 
+meio de uma forma declarativa e ao salvarmos e retornar ao navegador, teremos a exibição das duas imagens 
+selecionadas. 
+
+Para pensar: 
+porque url e description, não foram colocados entre []? 
+Pois, já não estamos acostumados a fazer Data binding?
+
+Se por acaso, tivesse feito isso, os links seriam buscados como se fossem propriedades, uma vez que 
+ao realizarmos Data binding, a expressão será avaliada como propriedade do componente e não é isso que 
+estamos buscando. 
+
+Queremos passar a string diretamente. Porém, se estes valores estão caindo em 
+photo.component.ts, precisamos usar a expressão no momento de suas leituras no template, como em 
+photo.component.html.
+
+
+Se for removido o Data bindingdeste arquivo, o valor de src será a string url. Portanto, é 
+importante identificar e entender bem o momento de passar e interpretar os parâmetros para os componentes,
+istoe é, quando usamos um componente A em um componente B, e queremos passar valores para as suas propriedades, apenas
+aquelas decoradas com @Input() se tornarão Inbound properties e poderão recebê-los.
+
+assim, está finalizado o primeiro componente -> PhotoComponent.
+
+
+
+
+07- Organizando nosso código em módulos
+
+Até o momento temos um único componente, o qual faz parte do módulo AppModule, também denominado root module
+("módulo raiz") no Angular, por ser o primeiro a ser carregado pela aplicação.
+
+Ao longo do nosso projeto, criaremos melhorias e outros componentes que dizem respeito ao universo de imagens.
+E já que um componente não funciona se não pertencer a um módulo, teremos que incluí-los em declarations de 
+app.module.ts e, eventualmente pelo seu tamanho excessivo, acabaremos não conseguindo distinguir estes grupos 
+com tanta clareza.
+
+Sendo assim, existe a possibilidade de criarmos um feature module, um módulo que contém vários componentes
+que fazem sentido de serem agrupados. Então, em "app", criaremos a pasta "photos", e tudo que se relaciona 
+com as imagens ficarão contidos nela, Inclusive, será incluido dentro dela a pasta "photo" e automaticamente -  Já
+que o Angular utiliza o TypeScript e seu editor verifica a integridade do código o tempo todo - 
+será indicado que há vários erros.
+
+Mesmo fazendo qualquer tipo de alteração, o projeto permanecerá com problemas no navegador. Neste caso, está sendo indicado que 
+não é possível importar PhotoComponent em AppModule. Assim, deletaremos a linha import { PhotoComponent } from 
+'./photo/photo.component', bem como PhotoComponentde app.module.ts.
+
+Feito isso, já que ele não pertence a nenhum módulo, criaremos um photos.module.ts em "photos", que será o feature 
+module. Nele será criado um módulo que irá declarar não só PhotoComponent, mas todos os outros componentes que dizem respeito 
+a imagens e o app.module.ts irá importar todos os moódulos nele mesmo.
+
+Este processo, tornará a aplicação muito mais organizada. Em photos.module.ts, digitaremos "@NgModule" e 
+iremos fazer a importação do angular/core, e entre parênteses iremos passar um objeto JavaScript.
+
+E assim, estaremos declarando PhotoComponent:
+
+import { NgModule } from '@angular/core';
+
+@NgModule({
+    
+    declarations:[ PhotoComponent ],
+    
+})
+export class PhotosModule {}
+
+
+se salvarmos o projeto da maneira que está e acessar o naveagdor, teremos uma página totalmente
+em branco, e no Console veremos que o componente não foi encontrado, pois, para isso ele 
+precisa pertecencer a um módulo. Assim, em app.module.ts, importaremos um módulo e com isso teremos 
+acesso ao componentes que foram declarados, automaticamente. Em declarations, só entram 
+componentes, portanto colocaremos PhotosModule em imports
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    PhotosModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+
+Desta forma, quabndo o primeiro módulo da alicação for carregador (AppModule), o programa entenderá que 
+dependemos de PhotosModule, que será carregado e por consequência o PhotoComponent terá que ser disponibilizado
+para isso.
+
+O que é que o Angular está importando em BrowserModule?
+Este módulo traz vários recursos que são muito utilizados no navegador. Por isso, de modo padrão, 
+o Angular CLI já faz a sua importação.
+
+A alteração que acabamos de fazer deve ser o suficiente para que a apllicação funcione.
+Salvando a mesma, voltamos ao navagedor e continuamos com o mesmo erro, indicando no Console
+que ap-photo não é um componente do ANgular, e que porecisamos verificar se ele faz parte de alguma módulo.
+
+Se criando o photos.module.ts e adicionamos PhotoComponent no declarations, como é possível que ele não 
+faça parte de um módulo?
+Além disso, este mesmo não foi importado em app.mod ule.ts?
+
+Mas, reparando agora, podemos ver que um passo importante foi esquecido:
+em declarations de photos.module.ts, se encontra tudo aquilo que o módulo possui. Caso tenhamos dez componentes, 
+eles se enxergam entre si dentro do módulo. Mas para que ele seja enxergado no módulo de quem importou PhotosModule, 
+precisaremos especificar na propriedade exports no NgModule, sendo necesário também torná-lo acessível para quem
+for importá-lo.
+
+@NgModule({
+    declarations:[ PhotoComponent ],
+    exports: [ PhotoComponent ]
+})
+
+ao fazer esta declaração, podemos verificar que tudo volta a funcionar normal no 
+navegador.
+
+Após tudo isso, podemos entender que um módulo pode declarar muitos componentes, mas 
+não exportar ou dar acesso a todos eles. Comparando com linguagens como Java ou C#, é como se
+tudo que se encontra em declarations estivesse privado e em exports fosse público.
+
+
+09 - Utilizando a primeira diretiva
+
+No momento temos dois componentes em exibição na página do navegador, cada qual usando seus 
+próprios dados, como era bem esperado. Mas e se de alguma forma tivéssemos cem ou duzentas 
+imagens, o que teríamos que fazer?
+séria muito trabalhoso. Além disso, sabemos que quando trabalhamos com uma grande quantidade
+de dados, no universo da programação, usualmente lidamos com listas.
+
+Vamos abrir app.component.ts e substituir as propriedades de AppComponent, que não estão
+sendo utilizados:
+
+  photos = [
+      {
+        url:"https://i.pinimg.com/564x/06/75/91/06759138c713c94de966852b834a0f81.jpg",
+        description:"Black Panther"
+      },
+      {
+        url:"https://i.pinimg.com/564x/06/75/91/06759138c713c94de966852b834a0f81.jpg",
+        description:"Black Panther"
+      },
+      {
+        url:"https://i2.wp.com/guiaa.aquinoticias.com/wp-content/uploads/2020/09/Pantera-Negra.png?resize=1068%2C712&ssl=1",
+        description:"Black Panther 2"
+      },
+      {
+        url:"https://universoreverso.com.br/wp-content/uploads/2018/03/Pantera-Negra.jpg",
+        description:"Pantera Negra Desenho"
+      }
+  ];
+
+Desta forma, criamos a propriedade photos, em que cada item do array é um objeto, com aquelas mesmas informações 
+de url e description das imagens que estavamos já carregando no navegador. A partir destes dados listados, queremos 
+criar um <ap-photo> para cada um dos dados proveniente do array.
+
+Pensando assim, logo imaginamos um forEach() passando por todos os itens e criando assim um <ap-photo>
+de maneira individual, fazendo um loop.
+
+Mas, a boa notícia é que o Angular possui um recurso muito usado chamado de diretiva, capaz de alterar 
+o comportamento já existente. A diretiva ngFor irá receber photos, o mesmo que aparece em app.component.ts.
+
+Entretanto, a cada passada que acontecer e querer referenciar photos, será usado o nome photo.
+
+Isso irá significar, que estaremos iterando photos e a cada passada, o valor da imagem correspondente ficará
+na variável photo. Não podemos esquecer de forma igualde declarar a variável usando let e se photo é uma 
+variável, em url colocamos photo.url e em description, iremos usar photo.description.
+
+
+Mas, lembrando que se não fizermos a questão do Data binding, será um problema, pois o Angular 
+entenderá que estamos passando a string photo.url e não o valor realmente da expressão. Por isso o 
+código com Data Binding, ficará assim:
+
+<ap-photo 
+    *ngFor="let photo of photos" 
+    [url]="photo.url" 
+    [description]="photo.description">
+</ap-photo>
+
+ao salvar e voltar no navegador, teremos todas as imagens sendo exibidas corretamente. Se adicionarmos mais uma 
+imagem no array,
+em app.component.ts, uma terceira imagem aparecerá na página. O Angular possui esta diretiva que encarrega de iterar 
+uma lista e repetir o componente para nós. Isso é muito interessante, já que, em vez de termos uma lista de imagem fixa,
+temos uma lista cujas imagens vem diretamente do back end.
+
+Desta forma, sabemos que a partir do momento que colocarmos um novo valor em photos, o Data binding do Angular irá 
+dirspará a renderização da tela em si e então teremos acessoa todas as imagens que vem do back end, 
+onde faremos a integração de todo o sistema.
+
+
+
+
+
+Capítulo 03 - Integração com Web API's
+
+02 - SPAs e consumos de API's
+
+buscando integrar a aplicação Angular com uma API, um back end...
+A Aplicação em si está rodando em um servidor disponibilizado pelo Angular CLI.
+
+O projeto em si que estamos gerando, ainda não será com foco de produção, mas é importante enfatizar 
+que o projeto será transformado em alguns arquivos que eventualmente poderão ser inclusos em um servidor 
+PHP, apache, Java ou qualquer outro..
+
+Neste caso, o Angular CLI faz este papel para nós e cria um servidor de desenvolvimento com todas as vantagens que vimos
+até aqui..
+
+A aplicação em Angular é estática, ou seja, no navegador, sendo assim é preciso que alguém forneça os dados.
+
+Assim, do "outro lado" da aplicação haverá outro servidor responsável por fornecer os dados para a 
+aplicação Angular. Em uma Single Page Application, este servidor normalmente é chamado de Web API e 
+vai funcionar fornecendo os dados, após o qual a Aplicação Angular conhecerá o endereço de onde 
+obtê-los e os acessará trazendo e renderizando para a exibição dos mesmos(photos) na tela.
+
+Então, se for uma questão de um fluxo natural de uma Single Page Application, a aplicação em Angular 
+fica em um Servidor A e a API com todos os dados e regras de negócio ficam em um Servidor B, de 
+uma maneira totalmente independente. A vantagem disso é que a equipe que trabalha na API, no caso do back end 
+pode de alguma forma trabalhar como preferir sem interferir no que a equipe de front end estiver fazendo e 
+vice-versa.
+
+Sempre deverá haver uma comunicação entre as aplicações front e back / Web API. 
+
+a Pasta da API será colocada lado a lado aonde se encontra a pasta do alurapic. Pensando em produção, "alurapic"
+se relaciona ao servidor que hospeda a aplicação Angular, enquanto "api" é o servidor que vai 
+hospedar a Web API.
+
+Então teremos um terminal rodando "alurapic" e abriremos outro prompt de Comando para rodar nossa 
+API, pois ambos precisam estar rodando simultaneamente.
+
+Após o processo, iremos acessar o local onde foi colocado a api e aplicaremos o npm install, sendo que este 
+último só deverá ser usado uma única vez, para que a API baixe todas as dependências para o funcionamento
+da aplicação.
+
+Talvez devido a atualização de um componente da API, pode ser necessário utilizar :
+ - npm install --unsafe-perm -g sqlite3!
+
+ ou outra forma que eu encontrei para corrigir esse ocorrido, seria efetuar a instalação
+ do sqlite3 diretamente:
+ - npm install sqlite3
+
+Logo em seguida executar e novo o comando:
+ - npm install
+
+e por fim:
+ - npm start
+
+que é o comando que executará a Web API. São exibidas algumas informações de acesso, usuário, e-mail,
+senhas, dados que por ora não será muito relevante, já que dizem respeito a parte de autenticação. 
+O importante é que, ao abrirmos o navegador e inserir a URL: "localhost:3000/flavio/photos", teremos
+acesso a dados de diversas imagens cadastradas para uso em nossa aplicação.
+
+
+Agora com a integração de aplicação Angular com a Web API. o Array photos virá 
+com os dados reotornados pela Web API. Lembre-se de que os dois terminais precisam estar rodando,
+caso aconteceça de pausar ou reiniciar alguma parte do sistema , é preciso abrir o terminal tanto 
+da pasta alurapic(na parsta do Angular CLI) e usar o comando ng serve --open e também ir 
+até a pasta da Web API e usar o npm start.
+
+
+
+03 - Baixando e subindo servidor da API
+
+baixar o servidor -> https://s3.amazonaws.com/caelum-online-public/865-angular/api.zip
+
+descompactar o arquivo em um local de sua preferencia, apagar o .zip(para evitar problemas).
+No terminal, vá ate o diretório, onde está a pasta "api" e busque certificar que dentro da mesma 
+há o arquivo package.json. Ainda dentro da pasta(API), executar o comando:
+ - npm install
+
+Buscar aguardar o processo terminar e logo em seguida, execute o seguinte comando 
+dentro da mesma pasta:
+ - npm start
+
+___________________________________________________________________
+
+ podemos ver que o resultado, será o seguinte:
+
+ Servidor escutando na porta: 3000
+Users
+{
+  user_id: 1,
+  user_name: 'flavio',
+  user_email: 'flavio@alurapic.com.br',
+  user_password: 123,
+  user_full_name: 'Flávio',
+  user_join_date: '2018-04-12 20:24:19'
+}
+Users
+{
+  user_id: 2,
+  user_name: 'almeida',
+  user_email: 'almeida@alurapic.com.br',
+  user_password: 123,
+  user_full_name: 'Almeida',
+  user_join_date: '2018-04-12 20:24:19'
+}
+Users
+{
+  user_id: 3,
+  user_name: 'calopsita',
+  user_email: 'calopsita@alura.com.br',
+  user_password: 12345678,
+  user_full_name: 'Calopsita do Agreste',
+  user_join_date: 1529952323485
+}
+Users
+{
+  user_id: 4,
+  user_name: 'alura',
+  user_email: 'alura@alura.com.br',
+  user_password: 12345678,
+  user_full_name: 'Alura',
+  user_join_date: 1530036414732
+}
+
+___________________________________________________________________
+
+
+para ver o resultado no navegador é so acessar:
+http://localhost:3000/flavio/photos
+
+será mostrado um JSON na janela do navegador.
+
+
+
+
+05 - HttpClient e injeção de dependência
+
+com o angular CLI rodando de um lado e do outro nossa Web API, poderemos consumir os dados 
+retornados por ela e exibir, no lugar de três imagens ficas, aquelas baseadas nos dados trazidos .
+
+como será feito essa integração?
+
+Sabemos que o primeiro componente a ser carregado pela aplicação é o AppComponent(em app.component.ts), 
+em que temos os dados ficos das imagens, os quais serão substituidos por um array vazio:
+
+export class AppComponent {
+
+  photos = [];
+
+}
+
+Ao salvarmos o arquivo e voltarmos ao navegador, nada irá aparecer na página, já que se formos 
+em app.component.html, o ngFor pegará um array vazio e não iterará em dado algum. Para termos 
+acesso à comunicação com a Web API, podemos optar pela requisição Ajax, JQuery, entre outros. No 
+entanto, no Angular existe um serviço para esse tipo de tarefa, interagindo-se ao framework e através
+do qual toda comunicação com o back end será feita: o HttpClient.
+
+Criaremos uma propriedade denominada http no AppComponent e a mesma guardará uma instância.
+Ao digitarmos new HttpClient, o VisualStudionos dará a opção de realizarmos auto import. Essa é uma vantagem 
+que o programa nos fornece, pois sem essa vantagem, teríamos que fazer o import primeiro e se caso, 
+não tivermos o endereço decorado, não iria adiantar de nada.
+
+Porém, se ao tentarmos realizar o auto import, o programa inclui um HttpClient que não é o que queremos 
+utilizar e sim um pacote selenium-webdriver/http, que serve para testes. Então, deletaremos esta linha gerada
+automaticamente, clicaremos em HttpClient e percebemos que a unica opção que existe para auto import é essa dos testes.
+
+Desta forma, incluiremos a seguinte linha no começo do app.component.ts:
+
+import { HttpClient } from '@angular/common/http';
+
+Este trecho fará com que o programa nos informe que, para criarmos uma instância de HttpClient
+precisamos passar um HttpHandler no construtor, da seguinte forma:
+
+export class AppComponent {
+
+    photos = [];
+    http = new HttpClient(new HttpHandler());
+
+}
+
+Porém, o programa ainda acusará erro e ao passar o mouse sobre o HttpHandler, aparecerá a mensagem que o mesmo 
+é uma classe abstrata - por lidarmos com TypeScript, bem neste caso não se utiliza o operador new.
+
+Para simplificar, o ideal seria que a aplicação fizesse esse trabalho todo por nós, ou seja, queremos uma 
+injeção de dependências. No Angular, precisamos incluir o constructor, o qual toda classe ECMAScript e TypeScript
+possui e que tambem usaremos o parâmetro de quem dependemos, neste caso, http.
+
+O angular em si, não save identificar, podendo desta forma, ser uma string ou um número, então é necessário tiparmos ou explicitar 
+o seu tipo. Em outras linguagens, tipo Java , temos algo como HttpClient http = new HttpClient(), ou seja, 
+o tipo vem antes da variável http. No TypeScript acontece o contrário, primeiro vem a variável e depois o tipo. E então usaremos 
+o console.log() para sabermos se a injeção funcionou como esperado.
+
+photos = [];
+
+  constructor(http: HttpClient) {
+    console.log(http);
+  }
+
+
+Deste modo, o AppComponentserá criado pelo angular e então passará pelo constructor(), e solicitará o HttpClient.
+O Angular, de alguma forma, pegará o HttpClient e o injetará no construtor para que possamos 
+utilizá-lo
+
+Se abrirmos o navegador, nada aparecerá, pois nenhum dado foi coletado. Porém, teremos muitos erros no console.
+Indicando assim: "No provider for HttpClient", ou seja, que não há provedor para ele.
+O que acontece é que o AppComponent não obtém resposta em relação a solicitação do HttpClient, 
+por sua complexidade, ou seja, ainda não conseguimos criar um HttpClient e ao mesmo tempo o Angular.
+
+Para que mtudo isso se resolva, precisamos de um provider para que o Angular o injete, mas não o temos ainda,
+mas a boa notícia é que existe um módulo do próprio Angular que, ao ser importado, em nossa aplicação, automaticamente
+terá um provider configurado para isso.
+
+no inicio tentamos importar um módulo incorreto e que desconhecia o HttpClient, sendo assim
+o VisualStudio com o TypeScript é esperto para compreender que os artefatos e as classes deste módulo estão 
+indisponíveis, porém, iremos ao módulo principal da aplicação, app.module.ts e incluiremos HttpClientModule em 
+imports:
+
+imports: [
+    BrowserModule,
+    AppRoutingModule,
+    PhotosModule,
+    HttpClientModule
+]
+
+Após importá-lo de maneira manual, inserindo { HttpClientModule } from '@angular/common/http'; no começo do código.
+Salvaremos e, desta vez, ao retornarmos para app.component.ts, selecionaremos o Import "HttpClient" from module
+"@angular/commom/http", incluiremos console.log(http) novamente, voltaremos ao navegador e deixamos de ter qualquer 
+tipo de problema
+
+com isso, o HttpClient foi injetado e poderá ser trabalhado para fazer as requisições Ajax para o back end.
+
+
+07 - Consumindo dados da API
+
+
+Agora com acesso ao HttpClient, iremos realizar a integração, voltando assim ao app.component.ts e 
+podemos deletar o console.log(http) que utilizamos como exemplo.
+
+Cada usuário terá um retorno de imagens, desta forma, trabalharemos com os únicos cadastrados no momento, 
+que seria Flávio e almeida, porém, o último não possui nenhuma imagem.
+
+Como objetivo atual temo que acessar o endereço http://localhost:3000/flavio/photos, o qual retornará
+os dados das imagens no forma JSON, para serem colocados na propriedade photos.
+Será retornado assim um observable e precisaremos da norificação do mesmo informando que os dados 
+que veem do servidor chegaram:
+
+export class AppComponent {
+
+    photos = [];
+
+    constructor(http:HttpClient) {
+
+        const observable = http.get('http://localhost:3000/flavio/photos');
+        observable.subscribe();
+    }
+}
+
+o observable só vai buscar os dados se tiver alguém inscrito nele, ou seja, observable.subscribe(), mas 
+não é preciso ficar declarando está variável que comentamos, pois, podemos desencadear uma chamada diretamente,
+solicitando assim o get e logo em seguida um subscribe():
+
+constructor(http:HttpClient) {
+
+    http
+        .get('http://localhost:3000/flavio/photos')
+        .subscribe();
+}
+
+O angular em si, é um framework que utiliza TypeScript, uma linguagem criada pela Microsoft, que acaba utilizando 
+o RxJS e o observable vem dele, está tecnologia bem poderosa por sinal e pode lidar com operações assíncronas.
+Por ser mais rico, no Angular2, preferiram utilizar o Observable em vez de Promise, por padrão.
+
+se caso, isso tudo der certo, serão retornados os dados que poderemos capturar em uma function, 
+no entanto, optaremos por um arrow function de nome photos, que é o que chega via 
+back end e então, a propriedade this.photos irá receber o resultado de photos.
+
+http
+    .get('http://localhost:3000/flavio/photos')
+    .subscribe(photos => this.photos = photos);
+
+    Porém, irá resultar em erro de compilação, ja que o resultado de tipo Object não é compatível
+    com o tipo any[]. Quando não é explicitado o tipo de uma variável em JavaScript, é adotado o tipo 
+    any[], ou seja, tipo "qualquer". Desta forma, indicaremos que photos será do tipo Object[].
+
+
+
+export class AppComponent {
+
+    photos: Object[] = [];
+
+    constructor(http:HttpClient) {
+
+        http
+            .get('http://localhost:3000/flavio/photos')
+            .subscribe(photos => this.photos = photos);
+    }
+}
+
+Entretanto, o problema ainda insistem em acontecer, pois o Object não pertence ao tipo Object[], 
+sabemos que trata-se de uma listagem que vem do back end, mas o TypeScriptnão sabe disso. Para consertar tudo
+isso, incluiremos <Object[]> no código e desta forma, os tipos em si começam a fazer todo sentido.
+
+http
+    .get<Object[]>('http://localhost:3000/flavio/photos')
+    .subscribe(photos => this.photos = photos);
+
+
+Salvando e voltando ao navagedor, podmeos reparar várias mudanças, provavlemnte do back end. 
+Para confirmar o bom funcionamento, podemos assim, abrir um bloco no arrow function, usar o console.log() e 
+ao salvar o arquivo, abrir a página dizendo que temos uma lista que cada imagem possui suas respectiva lista 
+em que cada imagem possui suas respectivas informação:
+
+http
+    .get<Object[]>('http://localhost:3000/flavio/photos')
+    .subscribe(photos => {
+        console.log(photos);
+        this.photos = photos
+    });
+
+
+E se em algum momento ocasionar um erro:
+
+O subscribe() receberá dois parâmetros, sendo o primeiro deles o callback a ser chamado caso haja
+sucesso, e o segundo a ser chamado passando o erro que vem do back end:
+
+http
+    .get<Object[]>('http://localhost:3000/flavio/photosx')
+    .subscribe(
+        photos => this.photos = photos,
+        err => console.log(err)
+    );
+
+
+Salvaremos com um endereço que não existe, nada seério no navegador e no console se 
+verifica, o tipo de erro, um HttpErrorResponse. No trecho acima, ainda poderemos  incluir err.message em 
+console.log() para podermos ver o retorno de maneira mais clara:
+
+Http failure response for http://localhost:3000/flavio/photosx: 404 Not Found
+
+Como não estamos lhe dando com erros no momento, voltarremos o código para o que estava presente antes:
+
+
+http
+    .get<Object[]>('http:localhost:3000/flavio/photos')
+    .subscribe(photos => this.photos = photos);
+
+
+
+08 - Isolando a acesso em serviços
+
+
+Service criado como uma classe especializada em consumir todos esses dados, 
+pois, ao invez de ter registrado dentro de app.Component.ts e em algum momento
+podemos ter muito mais componentes e que em diversos lugares seja preciso dar acesso
+a API de imagens, teremos assim o seguinte trecho:
+
+http
+     .get<Object[]>('http://localhost:3000/flavio/photos')
+     .subscribe( 
+       photos => this.photos = photos,
+       err => console.log(err.message)
+      );
+
+
+tendo que ser repetido diversas vezes e além do mais, se o endereço da API for alterado, 
+teremos que lembrar de alterar em todos esses lugares tambem, causando assim, 
+um trabalho totalmente desnecessário e desgastante.
+Sendo assim, isolaremos este acesso à API em uma classe especializada como citado
+inicialmente.
+
+No Universo do Angular essas classes são chamadas de serviços. Na pasta "photo", 
+ou seja, na mesma pasta de photo.component.html e photo.component.ts, 
+estaremos criando o arquivo photo.service.ts, para ficar simplesmente 
+mais organizado e pratico o acesso. Este novo arquivo não será um componente, 
+no entanto continuará sendo uma classe.
+
+Para poder acessar a API, o PhotoService também depende de HttpClient, 
+desta forma acrescentaremos constructor e a propriedade http, so cuidado
+no momento de importar de angular/common/http. Ele terá o método
+listFromUser(), que receberá como parâmetro um userName.
+
+Deste modo, quem for utilizar o PhotoService terá que chamar este mesmo método
+passando o userName e de acordo com o nome passado irá retornar todos os 
+dados presentes na API.
+
+
+copiando agora o trecho do código referente ao http:
+
+http
+    .get<Object[]>('http://localhost:3000/flavio/photos')
+    .subscribe(photos => this.photos = photos);
+
+e colando dentro de photo.service.ts, podmeos verificar que não temos acesso ao 
+HttpClient no método listFromUser(), desta forma, teríamos que incluir 
+algo com http: HttpClient e no constructor, this.http = http, sendo que desta forma, 
+teríamos acesso, porém, isso não será preciso, pois, vamos utilizar o modificador de acesso
+private no parametro do constructor, assim, o TypeScript irá entender que queremos 
+não apenas receber este parâmetro como também torná-lo uma propriedade da classe. 
+Através do provate, tudo que estiver fora de PhotoService não poderá usar o http, e isso
+irá justificar o uso do this.http também. Sem o modificador, iria resultar em um erro 
+de compilação.
+
+o subscribe de alguma forma também não poderá ser utilziado, ja que isto deverá ser 
+feito no momento da busca de dados. O responsável será quem for utilizar o método 
+listFromUser. Lembrando que, da maneira em que se encontra, o observable, por ser lazy, não buscará os dados.
+
+O userName é do tipo any, que quer dizer que qualquer tipo que passarmos será aceito. No entanto, 
+sabemos que userName será sempre texto, então podemos indicar isto de alguma forma. Ao passarmos o mouse sobre o
+this, será exibido o retorno void, que equivale de alguma forma a "nenhum" tipo especifico de retorno, desta forma, 
+acrescentaremos return:
+
+listFromUser(userName: string) {
+  return this.http
+  .get<Object[]>(API + '/flavio/photos')
+}
+
+aqui somente é preciso tomar cuidado para não utilizar String em vez de string.
+
+String -> pode ser usado como um identificador válido.
+string -> é uma palavra reservada e não pode ser um identificador.
+
+após o uso do this, ao passarmos o mouse em this, será retornado um Observable do tipo 
+Object[], ao salvarmos o arquivo e abrirmos o componente app.component.ts, precisaremos deletar
+a importação do HttpClient e importaremos photoService do tipo PhotoService, deixando o código mais clean.
+
+
+export class AppComponent {
+
+  photos: Object[] = [];
+
+  constructor(photoService: PhotoService) {
+
+    photoService
+        .listFromUser('flavio')
+        .subscribe(photos => this.photos = photos);
+
+  }
+
+}
+
+
+após salvarmos todas as alterações e analisarmos o navegador novamente, haverá um erro de ausência de provedor
+para PhotoService, isso estará ocorrendo porque quando o Angular cri o AppComponent e tenta injetar photoService, não
+consegue, pois, o mesmo o desconhece.
+Seria um pouco diferente da outra situação envolvendo erro de ausência de provedor que foi visto neste mesmo
+projeto, ao criarmos um serviço, precisamos utilizar @Injectable().
+
+Este decorator que é de maneira automática, importado do angular/core, irá indicar que 
+photoService é de alguma maneira injetável, ou seja, pode receber o HttpClient e outros.
+No entanto, será preciso definir/informar o seu escopo, se será um único PhotoService para a aplicação inteira ou 
+não.
+
+Já pensando mais a frente, se tivermos vários componentes e quisermos utilizar o PhotoService e o mesmo 
+objeto, então teremos que passar a configuração provideIn, um objeto JavaScript cujo valor é root, com isso, 
+sinalizaremos que quando o Angular for fazer a criação deste, será no escopo raiz, ou seja, qualquer componente
+da aplicação em si que precisar de PhotoService, o terá disponível.
+
+@Injectable({ provideIn: 'root' })
+export class PhotoService {
+
+  constructor(private http: HttpClient) {}
+
+  listFromUser(userName: string) {
+
+    return this.http
+              .get<Object[]>(API + '/' + 'userName' + '/photos');
+
+  }
+
+}
+
+
+ao salvarmos e retornarmos ao navegador, tudo estará funcionando como esperado e o código e si, 
+parecerá bem mais organizado de maneira bem mais elegante, inclusive em termos de manutenção e legibilidade.
+]
+
+
+09 - Tipando nossa API
+
+
+
+Optando por organizar o código de uma maneira mais elegante, buscamos isolar em uma camada de serviço.
+Buscaremos e iremos adquirir maturidade em termo de acesso à API. 
+Ao acessar via navegador, recebemos uma lista de objetos com propriedades como id, postDate, Url e assim 
+por diante, com várias informações sobre cada imagem presentes no nosso repositorio.
+
+Por agora, só estamos utilizando url e a description...
+ao acessarmos app.component.ts, criamos um bloco na arrow function e no array de photos, ondesomente por exemplo, 
+iremos acessar o id da imagem do primeira posição, porém, ao digitarmos photos[0]. , não é exibido nenhum tipo de 
+informação ou autocomplete, ao tentarmos adicionar a url, será mostrado um erro de compilação....
+
+O código em si quando executado, internamente ele 'roda' como JavaScript, sem tipagem alguma e é por isso que ele 
+funciona, porém, do ponto de vista do TypeScript, está mesma lista é do tipo Object[], o qual não possui 
+url ou outras propriedade, as quais estamos esperando ou buscamos, além do constructor, como por exemplo
+hasOwnProperty(), isPrototypeOf()....
+
+Detsa maneira, já conseguimos identificar que não é possível exibir os dados da primeira imagem, 
+pois, estamos utilizando uma tipagem -> OBject()... Assim, tentaremos trocar essa tipagem por any[]:
+
+export class AppComponent {
+
+    photos: any[] = [];
+
+    constructor(photoService: PhotoService) {
+
+        photoService
+            .listFromUser('flavio')
+            .subscribe(photos => {
+                photos[0].
+                this.photos = photos
+            });
+}
+
+
+
+Para agilizar o processo, ao pressionarmos no CTRL e clicarmos em listFromUser(), estaremos acessando 
+o método, onde iremos indicar que o seu devido retorno será do tipo any[]:
+
+listFromUser(userName: string) {
+    return this.http
+        .get<any[]>(API + '/flavio/photos');
+}
+
+
+Ao acessarmos novamente o app.component.ts e tentarmos usar o autocomplete novamente em photos[0]., ate aparecerá
+a opção description, por exemplo, porém, continuará não funcionando, mas o seu acesso sim... em outras palavras, 
+não há mais erro de compilação e como usamos o any[], o tipo, apartir de agora, poderá ser de qualquer um.
+somente por caso de verifricação, ao incluirmos um console.log(photos[0].description) e abrirmos o console
+do navegador, nos depararemos com "Farol iluminado", cuja é a descrição da primeira imagem:
+
+photoService
+    .listFromUser('flavio')
+    .subscribe(photos => {
+        console.log(photos[0].description);
+        this.photos = photos
+    });
+
+
+o problema em si foi resolvido?
+Mais ou menos, pois, se digitarmos descript em vez de description, o TypeScript não acusará erro algum e 
+no console será lido somente um simples "undefined", aleḿ disso,  estaremos perdendo o autocomplete.
+
+Para podermos corrigir este caso, iremos tipar o retorno da API. Em photo.service.ts e informaremos 
+que o retorno será apartir de agora do tipo any[], porém, trocaremos para Photo[], com propriedades específicas, 
+desta forma, na pasta "photo", junto ao serviço, criaremos o arquivo photo.ts, que não será um componente em si, 
+tampouco uma classe em si, e sim somente uma interface chamada Photo.
+
+No conceito do TypeScript, a ideia da interface tem a ver com encaixes específicos e buscaremos incluir 
+todas as propriedades dos objetos retornados na lista da API e iremos atribuir algum tipo específico para 
+cada um:
+
+export interface Photo {
+
+    id: number;
+    postDate: Date;
+    url: string;
+    description: string;
+    allowComments: boolean;
+    likes: number;
+    comments: number;
+    userId: number;
+
+}
+
+"A interface não diz em nenhum momento quais seriam os dados que precisam estar em cada uma destas propriedades
+e sim o 'shape' ou formato digamos assim, a forma que um objeto deve ter...."
+
+Em photo.service.ts, iremos importar Photo[] e o dado será tratado como um array desse tipo, sendo assim, 
+em app.component.ts começará a dar erro, pois quando acessarmos a posição 0 do array, veremos que não existe 
+a propriedade descript.
+
+Com isso, ficaremos menos suscetíveis a erros corriqueiros ao acessarmos estar propriedades, 
+pois, ao padronizarmos e tiparmos, seremos mais produtivos com o autocomplete. Caso a API mude, 
+a aplicação deixará de funcionar, pois, o TypeScript não irá prevenir essa questão, apenas receberá 
+os dados e tentará tratá-los, sem conseguir acessá-los.
+
+Se o acesso do retorno da API ocorrer em inúmeros locais, poderemos abrir a interface, clicar com o botão direito 
+na propriedade alterada, escolhendo a opção "Rename Symbol", inserindo um novo nome e pressionando "Enter", 
+assim, modificaremos o nome da propriedade em todos os locais em que o mesmo é acessado.
+
+o código final de app.component.ts se encontrará da seguinte forma:
+
+photoService
+    .listFromUser('flavio')
+    .subscribe(photos => this.photos = photos);
+
+
+
+10 - Ciclo de vida de um componente
+
+Buscando aplicar uma melhoria em nosso código, atualmente buscamos imagens e acessamos a API no constructor
+da classe AppComponent, porém, o que aconteceria quando o componente é contruído?  
+Inicialmente o Angular cria uma instância de AppComponent e depois aplica o decorator @Component para 
+tornar a instância em um componente efetivamente.
+
+buscando otimizar e padronizar o nosso código em si, buscaremos padronizar o constructor apenas para 
+injeção de dependências e qualquer lógica que queiramos executar será colocada em uma fase do ciclo de 
+vida que todo componente Angular possui.
+
+em Angular todo componente possui um ciclo de vida e ao focarmos em ngOnInit ou abreviando para OnInit.
+Ao passarmos o mouse sobre este método da maneira que esta em app.component.ts, nada será retornado, 
+e por isso ele é considerado void. 
+Movendo o código de PhotoService para ngOnInit(), porém, sabemos que o código em si não funcionará,
+pois, o PhotoService é acessível somente no constructor, sendo preciso assim, acessá-lo como propriedade
+da classe, para este fim, usaremos private:
+
+constructor(private photoService: PhotoService) { }
+
+ngOnInit(): void {
+
+    this.photoService
+        .listFromUser('flavio')
+        .subscribe(photos => this.photos = photos);
+}
+
+
+
+Em java, não é necessário incluir o this, mas em JavaScript e TypeScript, usaremos o mesmo para 
+acessar as propriedades de uma classe.
+Ao salvarmos e voltarmos ao navegador, tudo continua funcionando. 
+A fase en su di OnInit ocorre depois da instanciação de AppComponent e depois do componente receber as inbound 
+properties.
+
+para evitar erros ou divergências com relação ao ngOnInit, talvez por escrever errado ou algo do genêro, o melhor 
+a ocorrer é que o TypeScript possa nos avisar caso tenhamos algum erro deste tipo.
+
+Para isso, logo após o AppComponent incluiremos implements OnInit e pressionaremos "Enter", o programa então
+fará toda a importação da interface OnInit de angular/core, que permitirá a definição da forma de um objeto 
+para que possamos trata-lá de maneira tipada. além do uso do autocomplete, entre outros.
+
+No entanto, uma interface também nos obriga a usar determinados métodos, então, quando implementamos 
+a interface OnInit e passarmos o mouse por cima, o programa em si dirá que esta faltando ngOnInit() na nossa
+classe e ao clicarmos em AppComponent, no ícone e então em "Implement Interface 'OnInit'", o Angular 
+por si só, incluirá automaticamente o método ngOnInit(). O nosso código continuará compilando, 
+porém ao rodarmos a aplicação teremos um pequeno problema. já que o método lança uma exceção.
+
+Assim, moveremos o código de photoService para dentro do método e em seguida, moveveremos todo o 
+método após o constructor, por convenção e tornaremos photoService privada. Incluiremos o This antes de 
+photoService e então, poderemos salvar todo o arquivo.
+
+
+
+
+import { Component, OnInit } from '@angular/core';
+import { PhotoService } from './photos/photo/photo.service';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+})
+export class AppComponent implements OnInit{
+
+  photos: any[] = [];
+
+  /*
+    código deixará de funcionar, pois, o photoService so funcionava no constructor
+    e será preciso acessar a mesma como propriedade de classe, então, para isso..
+    podemos utilizar o private
+
+    e para acessar a(s) propriedade(s) da classe...utilizamos o this.
+
+    o constructor fica destinado a injeção de dependência.
+
+  */
+
+  constructor(private photoService: PhotoService) {}
+
+  ngOnInit(): void {
+
+    this.photoService
+    .listFromUser('flavio')
+    .subscribe(photos => this.photos = photos);
+    
+  }
+
+}
+
+
+Neste momento, se algo for digitado errado, a classe em si não irá compilar e nenhuma alteração do projeto 
+será vista enquanto o ngOnInit() não for implementado de maneira correta, salvamos, voltamos ao navegador e 
+tudo continuará funcionando conforme esperado. 
+O Angular em si, possui outros ciclos de vida, mas para este momento vimos que para convencionar que o 
+constructor seja destinado a injeção de dependência e qualquer inicialização que queiramosfazer posteriormente
+seja feito no ngOnInit().
+
+por fim, acessando a definição da classe photoService, saberemos que ela depende de um HttpClient e para 
+que ele esteja disponível, o app.module.ts faz importação de HttpClientModule, mas, ao pararmos para 
+pensar, quem depende disso é o app.module.ts ou photos.module.ts?
+Porque se photo.service.ts pertence a photos.module.ts, a idéia é que o segundo forneça o HttpClient
+de que necessita.
+
+Caso o HttpClient não esteja presente em app.module.ts, a aplicação não irá funcionar. Então, garantimos que 
+a dependência necessária para este módulo funcionar seja em photos.module.ts e por isso incluiremos a linha
+imports: [ HttpClientModule ] em @NgModule e removeremos HttpClientModule e a linha referente ao seu import 
+em app.module.ts
+
+Ao salvarmos e retornarmos a aplicação, tudo continua funcionando como esperado. A grande questão é 
+qie se pegarmos a pasta photos.module.ts, ela importará tudo que for necessário para que seus componentes funcionem, e 
+agora, sim, ela depende de HttpClientModule.
+
+
+12 - O que aprendemos?
+
+Tópicos vistos na aula:
+
+ - Consumir uma Web API através do serviço HttpClient
+ - Injeção de dependência e a importância de providers
+ - Isolamento da lógica de acesso à Web API em classe de serviço
+ - Tipagem do retorno da API através de interface e sua vantagem
+ - Componentes possuem ciclo de vida
+ - A fase OnInit
+
+
+ Capítulo 04 - Single Page Applications e rotas
+
+ 02 Organizando ainda mais nossa aplicação
+
+ Buscando organizar um pouco mais o código e todas essas alterações serão feita aos poucos, para que o entendimento 
+ e a motivação por trás de cada um desses passos fique evidente.
+
+ Hoje, da maneira que está, o componente responsável pela exibição de imagens é o AppComponent e tanto isto é verdade 
+  que ele é o primeiro componente a ser carregado por toda nossa aplicação.
+
+
+Mas, ao pensarmos no domínio de imagens, o módulo da nossa aplicação que guarda tudo que dia respeito a imagens é 
+na mais, nada menos que PhotosModule. Sendo assim, por que não criamos um componente dentro deste módulo, cuja responsabilidade
+será exibir as imagens?
+
+com isso, o AppComponent não será mais o responsável por nada, sendo apena o primeiro componente a ser carregado na página.
+Além disso, posteriorment teremos uma forma de submeter imagens, e outros recursos, como outro componente com o escopo 
+da página, ou seja, componentes que se equivalem a páginas na aplicação.
+
+criaremos assim, na pasta "photos", que é onde se localiza PhotosModule, o componente PhotoListComponent. Entretanto não o 
+faremos de maneira manual, pois sabemos que precisamos criar os arquivos photo-list.component.ts, photo-list.component.html, 
+entre outros e adicioná-los na declaração do módulo e tudo mais.
+
+para isso, usaremos o próprio Angular CLI para esta tarefa em si. Lembrando quie estamos trabalhando com dois terminais 
+ao mesmo tempo, sendo que um deles é o servidor para a nossa API e o outro é o Angular CLI. 
+Executando a pausa do Angular CLI, executaremos o comando ng generate component photos/photo-list.
+
+Todo componente gerado automaticamente fica na pasta "app", mas queremos que neste caso, precisamos que PhotoListComponent 
+fique em "photos". Por consequência, todos os demais arquivos serão criados nela também, inclusive alguns arquivos de teste
+que não serão usados no momentos, além disso, o comando fará um update em photo.module.ts.
+
+Agora abriremos este arquivo e veremos inclusive um .sccs que inicialmente não será usado, mas que já estará pronto 
+para o uso e todo o kit, com a boa prática de implementar o OnInit e o método correspondente para o caso de querermos 
+incluir algum código na inicialização. Em declarations de photos.module.ts, também se encontrará o 
+PhotoListComponent.
+
+Em app.component.ts, o contéudo de ngOnInit() junto com constructor e photos será recortado, deletaremos implements
+OnInit, bem como a linha referente ao import de PhotoService e OnInit entre as chaves no import localizado logo acima 
+do mesmo. 
+Desta forma, o código ficará assim:
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+})
+export class AppComponent {}
+
+
+entre outras palavras, o AppComponent não fará nada. Salvaremos o arquivo, acessaremos photo-list.component.ts 
+e colocaremos o trecho de código recortado de AppComponent:
+
+export class PhotoListComponent implements OnInit {
+
+  photos: any[] = [];
+
+  constructor(private photoService: PhotoService) {}
+
+  ngOnInit(): void {
+
+    this.photoService
+    .listFromUser('flavio')
+    .subscribe(photos => this.photos = photos);
+    
+  }
+
+}
+
+após está alteração, teremos que fazer o import novamente, sendo assim, so repetir o processo de clicar na lâmpada e optarmos
+por "Import 'PhotoService' from module "../photos/photo.service"". 
+Ao salvarmos, podemos perceber que AppComponent não está utilizando nada de photo.module.ts e se observarmos este arquivo, 
+PhotoComponent está presente em exports, isto, porque app.module.ts importa PhotosModule e para que o mesmo tenha acesso
+ao PhotoComponent, ele teve que ser exportado em photos.module.ts
+
+Olhando assim, já que tudo que diz respeito a imagens está se encontrando dentro de "photos" e de  photos.module.ts, 
+não será necessário exportarmos tal componente, já que ninguém de maneira externa a exte módulo irá utilizá-lo, caso isso
+aconteça ai exportaremos sob demanda, mas o importante agora é buscarmos entender qme em declarations há PhotoComponent e 
+PhotoListComponent. Por fazerem parte do array de declarations, um enxerga o outro, e isso é o suficiente.
+
+agora salvando o projeto e retornamos ao navegador, nada será exibido. 
+Claro, porque primeiro o componente a ser carregador pela aplicação é AppComponent, que não exibe mais nada.
+Desta forma, no lugar da exibição deste componente, queremos qie PhotoListComponent seja exibido e mais, 
+quando tivermos um cadastro de imagem, por exemplo, podemos buscar a possibilidade de usuário obter este acesso.
+
+Ao remover o código do AppComponent para app.module.ts, também recortaremos o template de app.component.html, 
+que portanto, ficará vazio e o colocaremos em photo-list.component.html
+
+<ap-photo 
+    *ngFor="let photo of photos" 
+    [url]="photo.url" 
+    [description]="photo.description">
+</ap-photo>
+
+Quando o Angular CLI for fazer a importação do PhotoListComponentem photos.module.ts, ele foi incluido como sendo o último, 
+porém, adotamos a convenção de que as importações do Angular vêm primeiro, seguidas das importações dos componentes criados 
+por nós, portanto ajeitaremos o código de acordo.
+
+se caso acontecer de por padrão, o auto import od VS Code estiver utilizando aspas e sabemos que em JS a preferencia é por 
+aspas simples ou apóstrofes. É isto que o Angular CLI fez ao adicionar o import de PhotoListComponent em PhotoModule. 
+será que existe uma maneira de ensinarmos ao programa que durante as importações é preciso utilizar as aspas simples?
+
+a resposta é sim, basta irmos em File > Preferences > Settings e então ao lado esquerdo serão exibidos as configurações 
+padrões do VS, enquanto do lado direito estarão as configurações do usuário, em que incluiremos as seguintes linhas:
+
+"javascript.preferences.quoteStyle": "single"
+"typescript.preferences.quoteStyle": "single"
+
+para simular basta remover um import e salvando o arquivo em si, buscando importar o mesmo novamente, veremos 
+que a configuração vai ser salva e funciona perfeitamente. Então, basta substituir todas as aspas duplas existentes
+para manter um padrão existente no código e apartir dai, a configuração nova cuidará de tudo isso.
+
+
+
+05 BrowserModule e CommonModule
+
+07 Single Page Application e Rotas
+
+Aqui buscaremos criar um novo componente, simplesmente para que haja dois componentes em photos.module.ts
+Simplesmente, para que em um momento iremos exibir as imagens e em outro momento iremos exibir a página de formulários
+para cadastro de novas imagens.
+
+dentro da pasta "photos" criaremos via -> ng generate component photos/photo-form e logo em seguida aparecerá automaticamente 
+em declarations de photos.module.ts.
+
+Subindo nosso ambiente novamente via ng serve --open e no VS, teremos dois componentes com escopo de página, com 
+granulidade alta - "photo-list" e "photo-form"
+
+em nossa aplicação hoje, o primeiro componente a ser carregado em index.html é o <app-root>, então, não faz tanto sentido 
+incluirmos um seletor de "photo-form" ou de "photo-list", já que esta parte será fixa. Queremos que o componente adequado 
+seja carregado acordo com o endereço que o usuário inserir.
+
+É com base nesse sentido que entraremos agora na parte de roteamento de uma Single Page Applications, sendo assim, a página
+index.html irá se encarregar de exibir tudo o que a aplicação possui, sem precisar carregar outras páginas.
+
+
+Para o angular identificar o que será o index.html, ele não irá carregar <app-root> e sim funcionará como uma grande lacuna,
+a qual, de acordo com os endereços inseridos, será feito um "de/para", verificando assim a origem da rota e tomando uma ação 
+adequada com o componente correspondente
+
+
+as rotas em si, são chamadas de path, cada caminho da aplicação do nosso sistema de rotas, estará associado a um componente.
+Seria como se o Angular, ao receber um determinado endereço no navegador, antes de acessar o back end e tentar fazer 
+uma requisição, ele intervirá e irá verificar se a rota é cadastrada por ele.
+Sendo este o caso, a requisição não irá para o back end e sim, ficará com o Angular, que ficará responsável por carregar o 
+respectivo componente, interceptando assim a mudança de endereço e irá verificar se é uma rota válida e por fim, carregará 
+o componmnente, caso a rota não seja válida, a requisição irá seguir para o back end.
+
+o component <app-root> continuará sempre sendo o primeiro a ser carregado pela aplicação e dentro de "app", criaremos 
+o arquivo app.routing.module.ts, um módulo, sendo necessário importá-lo.
+Buscaremos criar este arquivo de maneira manual, digitando todo seu conteúdo  para entendermos melhor seu fundamento.
+Por ser um módulo, ele tera @NgModule e uma constante declarada denominada routes("rotas"), que será 
+um array de JavaScript
+
+o array routes terá configuração de cada rota da nossa aplicação e será responsáveçl diretamente pelo carregar do componente 
+adequado.
+cada configuração é feita por meio de um objeto JavaScript no qual indicamos um path, ou seja, no caso de user/flavio
+carregaremos o component PhotoListComponent e faremos o autoimport. A outra rota é para p/add, para o qual será carregado
+ o component PhotoFormComponent.
+
+ Da maneira como está, resultaria em problema, pois o Angular espera encontrar um objeto com propriedade Path.
+ A tipagem TypeScript nos ajudará nisso, então desta forma, indicaremos que routes é do tipo Routes. Porém, ao tentarmos 
+ importá-lo o Angular CLI não dará a sugestão que esperamos, pois, o seu módulo de rotas ainda não foi carregado.
+
+ então, faremos manualmente:
+
+ import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+import { PhotoListComponent } from './photos/photo-list/photo-list.component';
+import { PhotoFormComponent } from './photos/photo-form/photo-form.component';
+
+const routes: Routes = [
+    { path: 'user/flavio', component: PhotoListComponent},
+    { path: 'p/add', component: PhotoFormComponent}
+];
+
+@NgModule({
+
+
+    
+})
+
+export class AppRoutingModule {}
+
+o programa apartir daqui, entenderá que cada item do array irá precisar ser um objeto JavaScript com tais propriedades e tudo está muito bem tipado. 
+Continuando, em NgModule precisamos importar o RouterModule, que é o módulo de rotas do Angular. Entretanto, deste modo, 
+o AppRoutingModule importa RouterModule, o qual não estará linkado ao arquivo de rotas que acabamos de criar (routes), 
+ou seja, não hpa uma relação entre eles.
+
+Agora importaremos o RouterModule diretamente em imports e utilizaremos forRoot(). Sendo nossa aplicação localhost:4200, 
+tudo que for 4200/ terá relação com a rota Raiz. Então, o resultado de forRoot()será importado e levará em consideraçãoesta lista de rotas 
+(RouterModule)
+
+@NgModule({
+
+  imports: [ RouterModule.forRoot(routes) ]
+
+})
+
+
+É como se já tivessemos um RouterModule pré-configurado que conhece todas as rotas da aplicação de antemão, 
+em vez de passarmos um RouterModule que não sabe de nada, sendo assim, salvaremos o arquivos e acessaremos 
+app.module.ts e importaremos AppRoutingModule. Com isso, o BrowserModule estará vindo junto, com as rotas pré-configuradas.
+
+como fica, para o Angular CLI não se perder, durante as importações, sempre é bom, pausar o processo e dar um 
+ng serve --open novamente, so para atualizar o processo.
+
+
+
+08 - Lidando com rotas inexistentes
+
+o sistema de rotas hoje já esta funcionando, de acordo com o esperado, o que pdoe ser confirmado se digitarmos o endereço 
+localhost:4200/user/flavio no navegador, isto, fará com que a página contendo a lista de imagens seja carregada, do mesmo 
+modo se digitarmos localhost:4200/p/add, o photo-form será carregado, porém, se colocarmos um endereço que não existe ?
+
+Não irá exibir nada e se ainda consultarmos o console, haverá indicado um erro que não há nenhuma rota que se relacione com o 
+endereço digitado, porém, isso pode ser melhorado e uma soluçlão seria incluir uma tereceira rota em routes de 
+app.routing.module.ts que, ao ser carregada, para qualquer endereço que não sejam estas duas opções, carregará
+PhotoListComponent:
+
+
+const routes: Routes = [
+
+  { path: 'user/flavio', component: PhotoListComponent },
+  { path: 'p/add', component: PhotoFormComponent },
+  { path: '**', component: PhotoListComponent }
+
+];
+
+porém, o ponto aqui não é indicar para o usuário sobre uma página indicando que o endereço digitado existe ou não 
+foi econtrado, mas, sim onde está a página que não foi encontrada?
+No módulo da pasta "photos", ou em app.module.ts?
+
+Nenhum dos dois, pois, como nenhum dos dois, não possui relação direta com "photos" e também não queremos importá-lo 
+em app.module.ts, a ideia geral em si é que o mesmo contenha apenas as importações dos módulos que a aplicação 
+realmente precisa utilizar, criaremos assim, um módulo chamado "errors" diretamente na pasta "app".
+
+para resolver ou contornar tudo isso, criaremos o componente not-found, ao se dirigir ao terminal e inserir o comando
+ng generate module errors, de maneira automatica uma subpasta dentro de "app" será criada, dentro da qual será criado 
+o módulo errors.module.ts, com o importe CommonModule.
+
+criando o componente not-found, voltando ao terminal e digitando ng generate component errors/not-found, o mesmo será
+criado dentro de "app > errors", sendo o primeiro erro que teremos, qualquer outro tipo de erro, como acesso 
+não permitido/autorizado ou algo assim, também será criado por ali, além disso, foi declarado NotFoundComponent no array
+de declarations automaticamente
+
+Em not-found.component.ts há uma estrutura básica, com implementação do OnInit e tudo mais, em not-found.component.html, 
+substituiremos todo o conteúdo por:
+
+<div class="text-center">
+    <h2> This page is not available! </h2>
+
+    <p>
+        The link you have accessed may be broken or 
+        the page may have been removed.
+    </p>
+
+</div>
+
+como podemops analisar, se trata de texto estáticoque indicará que a pággina não foi encontrada. Utilizamos a classe
+text-center do próprio bootstrap para que a estrutura em si fique totalmente centralizada. Salvaremos o arquivo e com 
+isso o componente estará pronto, possuindo apenas um template, uma apresentação, agora o que resta é 
+incluí-lo em nossa rota.
+
+agora acessando app.routing.module,ts, onde se encontra PhotoListComponent no último path, colocaremos 
+NotFoundComponent.
+Salvaremos e ao testarmos seu funcionamento retornando ao terminal e subindo todo o processo novamente.
+O ambiente de desenvolvimento será construído após o navegador ser aberto.
+
+Agora em nosso projeto, será preciso fazer uma parte importante, onde o NotFoundComponent está sendo indicado que
+não faz parte do NgModule, sendo que isso não é verdade, pois, ele faz part de errors.module.ts e se consultarmos 
+app.module.ts, em nenhum momento ErrorsModule está sendo carregado, sendo assim, o componente da rota 
+NotFoundComponent, não estará disponivel na nossa aplicação, então faz todo sentido o console informar o que estamos tentando 
+usar em app.routing.module.ts não pertence ao módulo realmente, pois o mesmo do qual ele faz parte não foi carregado.
+
+para isto ser resolvido, em app.module.ts será feito a importação de ErrorsModule:
+
+imports: [
+    BrowserModule,
+    AppRoutingModule,
+    PhotosModule,
+    ErrorsModule
+]
+
+
+10 - segmento de rotas
+
+Em nossa aplicação, temos um ponto interessante que é, se acessarmos localhost:4200/user/flavio, 
+significa que queremos ir a nossa API, em photo photo-list.component.ts, e exibir as imagens referentes a este 
+cadastro que foi efetuado. No entanto, queremos que, ao digitarmos localhost:4200/user/almeida, ou seja, buscarmos 
+utilizar outro usuário, também passe a ser uma rota válida para o Angular.
+
+Desta forma, precisaremos passar o nome da URL para o PhotoService. Buscamos, então, uma rota parametrizada que não
+depende de URLs fixas, variando de acordo com o usuário cadastrados. Da maneira em que está, se tentarmos qualquer outro 
+usuário, cairemos na página de erro.
+
+Em AppRoutingModule, queremos tornar este segmento da URL uma varíavel, algo genérico, como se funcionasse como um coringa.
+Para tal, basta colocarmos :userNAme no local aonde estava designado flavio
+
+const routes: Routes = [
+
+  { path: 'user/:userName', component: PhotoListComponent }, 
+  { path: 'p/add', component: PhotoFormComponent }, 
+  { path: '**', component: NotFoundComponent }
+
+];
+
+com esta troca ou colocação o sistema de rotas não aceitara erros de digitação em user na barra de endereço, passará
+a aceitar qualquer usuário, em outras palavras que a rota pode ser localhost:4200/user/ seguido de qualquer userName
+criado, para este momento o mais importante é que o que buscamos é que queremos ter acesso a este parâmetro da rota no componente,
+para passarmos ao nosso serviço, pois, não fará sentido nenhum colocar qualquer outro nome de usuário na barra de endereço, 
+mas sempre retornar flavio, pois é o que etsa registrado no OnInit(), em photo-list.component.ts.
+
+
+usando uma ferramenta própria do Angular, que é disponobilizada pelo próprio serviço (módulo) de rotas, em 
+photo-list.component.ts iremos receber PhotoService dentro do constructor e queremos assim ativar o activateRoute, 
+no qual indica a rota ativada em determinado momento. Em ngOnInit(), iremos  incluir const userName = 
+this.activateRoute.snapshot.params.userName, aonde o snapshot será equivalente a uma fotografia do momentos desta rota:
+
+
+
+  constructor(
+
+    private photoService: PhotoService,
+    private activatedRoute: ActivatedRoute
+
+  ) {}
+
+  ngOnInit(): void {
+
+    const userName = this.activatedRoute.snapshot.params.userName;
+
+    this.photoService
+    .listFromUser(userName)
+    .subscribe(photos => this.photos = photos);
+    
+  }
+
+Retornando agora para listFromUser, no trecho acima para acessarmos photo.service.ts, aonde substituiremos flavio, que 
+era a parte fixa que estava declarada, deixando o código da seguinte forma:
+
+listFromUser(userName: string) {
+    return this.http
+        .get<Photo[]>(API +  '/' + userName + '/photos');
+}
+
+explicando um pouco o trecho acima.
+
+Quando acessarmos a rota passando qualquer outro valor, o userName, que é o segmento da rota, o receberá, extraindo assim 
+este valor,passando o método listFromUser(), o qual irá concatenar e ao mesmo tempo montar a URL de maneira dinâmica e é 
+deste modo que conseguimos ter um segmento de rotas de maneira parametrizada e, em um componente, por meio de activatedRoute
+conseguimos acessar qualquer valor que for passado à rota.
+
+Tópicos abordados no capítulo 04:
+
+ - BrowserModule vs CommonModule
+ - Single Page Application e rotas no lado do navegador
+ - O módulo RouterModule
+ - A diretiva router-outlet como grande lacuna para exibição de outros componentes
+ - Módulo de rotas e definição de rotas
+ - Como lidar com páginas 404
+ - Parametrizando rotas e como obter valores do segmento parametrizado
+
+
+
+
