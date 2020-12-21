@@ -1763,4 +1763,224 @@ Tópicos abordados no capítulo 04:
 
 
 
+Capítulo 05 - Novo Componente, novos conceitos
 
+02 - Melhorando a apresentação da lista
+
+Podemos analisar que nossa página esta certinha, as imagens não estão ordenadas de forma visualmente agradável.
+Vamos aproveitar, que já estamos utilizando Bootstrap e vamos aplicar seu grid para exibirmos uma imagem ao lado da outra.
+
+No template photo-list.component.html, por motivos maiores de semântica, utilizaremos uma lista ordenada, pois o back-end retorna 
+as imagens das mais recentes às mais antigas. 
+Colocaremos um <ol>, pórém, não tera bullets nem nada do tipo, portanto usaremos a classe list-unstyled e conterá itens 
+<li>, cada um designando uma imagem.
+
+Assim, a diretiva *ngFor, deixará de ficar em ap-photo e sim dentro de <li>.
+Com relação ao grid, é necessário definir quais serão as linhas, portanto utilizaremos a classe row, ou seja , a lista
+que é o <ol>, equivalente a uma linha, ficará indicando que cada <li> terá a classe col-4. Isto, porque o grid do Bootstrap
+possui 12 colunas, então, neste caso, cada <li> irá guardar 4 colunas, somando as 12 no total.
+
+Analisando melhor, não poderemos passar este valor, caso contrário teremos problema no layout.
+Salvando o código que mtrarei a seguir e voltarmos ao navegador, tudo funcionará conforme o esperado.
+
+<ol class="list-unstyled row">
+  <li *ngFor="let photo of photos" class="col-4">
+    <ap-photo 
+        [url]="photo.url" 
+        [description]="photo.description">
+    </ap-photo>
+  </li>
+</ol>
+
+porém, ao olhar o inspect, podemos perceber a presença ao inspecionar o DOM, que teremos 12 <lis>'s, 
+cada um com tamanho 4 e isso não faz sentido algum, isso irá sobrecarregar tudo que estamos fazendo,
+para resolver esse caso e respeitando o Bootstrap ao mesmo tempo, o que podemos fazer?
+Buscaremos criar um novo componente com a responsabilidade de receber a lista de imagens e renderiza-lá da forma correta para 
+caber no grid do Bootstrap.
+
+
+03 Componente exclusivo para listar fotos
+
+Inicialmente criaremos o componente photos, a ser utilizado por photo-list, que diz respeito à página. Por ser um componente 
+muito atrelado a photo-list, o criaremos dentro desta pasta. Assim, se quisermos saber quais componentes dividimos para ajudar
+na organização de exibição do maior componente, que é o photo-list, encontraremos nesta pasta
+
+pausaremos o Angular CLI, para que possamos digitar ng generate component photos/photo-list/photos. 
+Agora se checarmos o photos.module.ts, o PhotoComponent foi automaticamente adicionado em declarations e para evitarmos
+que tudo fique em um mesmo componente, dividimos elementos em photo-list e photos, sendo este especializado em exibir as 
+imagens de acordo com o grid do Bootstrap
+
+Logo, em seguida abriremos o photo-list.component.html, recortaremos o conteúdo e o colocaremos em photos.component.html, 
+para que o componente photos.component.ts passe a receber uma lista de imagens do tipo Photo, um array inicialmente vazio 
+e logo em seguida ja é feito o import e sabemos que para passarmos um dado para este componente, ele precisa ser um inbound 
+Property, desta forma, tambem importaremos o @Input
+
+export class PhotosComponent implements OnInit {
+
+  @Input() photos: Photo[] = [];
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+}
+
+no momento que realizamos a criação do componente, app-photos está prefixado com "app", muitas vezes é preciso tomar cuidado, 
+pois nossa aplicação se chama alurapic, desta forma, usaremos somente "ap-photos" no selector do @Component em photos.component.ts,
+"ap-photo-form" em photo-form.component.ts e "ap-not-found" em not-found.component.ts
+
+em photos.component.ts passaremos a utilizar uma lista de imagens em Photo e seu seletor é ap-photos.
+precisaremos utilizar este componmnente em photo-list.component,html, então incluiremos as tags <ap-photos> e o Data binding 
+de photos:
+
+<ap-photos [photos]="photos"></ap-photos>
+
+Em photo-list.component, onde está photos: any[] = [], trocaremos por photos: Photo[] = [] e no arquivo photo-list.component.html
+usaremos o componente ap-photos e associaremos a inbound Property photos à propriedade photos, que guarda as imagens provenientes
+do back end.
+
+
+agora que retiramos a responsabildiade de apresentação do componente de photo-list para photos, toda vez que acessarmos 
+o navegadorcairemos na página de erro, pois, ainda precisamos especificar o usuário. Se tentarmos com localhost:4200/user/flavio
+todas as imagens serão exibidas como anteriormente, ou seja, da maneira correta, porém, ainda com o problema de termos 
+um único row(linha) com vários columns (colunas).
+
+vai ser necessário ajustarmos todos os dados do componente photos, no ato de recebê-los, para que o grid do Bootstrap
+funcione corretamente.
+
+
+
+04 Implementando a lógica do Grid
+
+pratindo deste ponto, precisamos entender que o nosso template(photo.component.html) não 
+pode se basear na lista de imagens recebidas e sim em uma lista de dados, ao qual criaremos e começará em branco. 
+Dabemos também, que se não tiparmos, este array, ele será any[].
+Desta forma, precisaremos adequar toda esta estrutura para uma nova, com um array cujo limite de itens será 3. Assim, cada array
+corresponde a uma linha com 3 colunas.
+
+em photo.component.ts, ficará assim:
+
+@input() photos: Photo[] = [];
+rows: any[] = [];
+
+Neste sentido, em photos.component.html definiremos como row  a nossa <li>. Isto porque a primeira lista será composta 
+de três imagens, a segunda também, e por ai vai e não iteraremos mais de photos, mas sim de rows e também incluiremos 
+uma <div> de classe col-4, pois queremos 3 itens para totalizar 12 e assim utilizarmos todo o grid do Bootstrap
+
+desta forma, não precisamos fazê-lo para cada item da coluna, então teremos outro *ngFor dentro deste. A diferença 
+é que neste iteraremos de cols e trocamos cols de "let cols of" por photo:
+
+<ol class="list-unstyled">
+    <li *ngFor="let cols of rows" class="row">
+        <ap-photo>
+            [url]="photo.url"
+            [description]="photo.description"
+        </ap-photo>
+    </li>
+</ol>
+
+falta implementarmos a lógica para a construção da lista rows de photos.component.ts. Em ngOnInit() iremos indicar 
+que this.rows receberá o resultado this.groupColumns(), um método a ser criado e que recebe a lista de photos.
+Criaremos assim um array chamado newRows que começa vazio e saberemos que teremos que retorná-lo em algum momento.
+
+Será feito uma iteração de 3 em 3, entãi utilizaremos um for:
+
+ngOnInit(): void {
+  this.rows = this.groupColumns(this.photos);
+}
+
+groupColumns(photos: Photo[]){
+  const newRows = [];
+
+  for(let index = 0; index < photos.length; index+=3){
+    newRows.push(photos.slice(index, index + 3));
+  }
+
+  return newRows;
+
+}
+
+
+Isso é um maneira clássica, para resolver esse tipo de questão, o one framework não ajudaria em nada, sendo necessário
+aplicar uma lógica de JavaScript e claro, conhecer a linguagem em si.
+
+A função slice() sempre irá receber a posição inicial que será levado em consideração e a final de forma não inclusiva, 
+"fatiando" o array, ou seja, quando o primeiro index for 0, o outro valerá 3 e o slice() pegará a fatia de 0 a 2, 
+está segunda posição não é inclusiva, e se tivéssemos colocado a posição final como 2, seriam pego somente 0 e 1, 
+por isso utilizamos a expressão index + 3. Na passada seguinte séra 3 e o final será 6, pegando assim de 3 a 5.
+
+Se caso no final sobrarem dois ou apena um elemento, não há problema, pois o slice() só trará a quantidade existente.
+Porém, ao executar nada é exibido no navagador e no console não há erro algum.
+
+
+07 Change Detection
+
+Quando carregamos o photo-list.componente.ts, o valor de photos é um array vazio. Porém, a busca de dados é uma operação
+assíncrona e vai demorar milésimos de segundos até ser executada e lançar um novo valor. Então, quando photos começa 
+com um array vazio, no template (photo-list.component.html) o Data binding para ap-photos passará um array totalmente vazio 
+também.
+
+Já que photos estará vazio e na inicialização do componente é feita uma única vez, ele tentará acionar o 
+groupColumns(), desta forma, será lançado um novo valor para o array em photo-list.component.ts, o qual automaticamente
+irá para photo-list.component.html, por conta do Data binding.
+
+ou seja, apesar de o array de @Input photos: Photos[] = [] em photo-list.component.ts estar sendo atualizado, em 
+momento algum estamos chamando this.groupColumns(). Ele só estava sendo chamado na inicialização do componente, 
+e apenas uma vez. Precisamos chamá-lo toda vez que a propriedade da inboud property mudar.
+
+desta forma, ngOnInit() não estará mais servindo como antes, sendo assim, trocaremos a implementação do ngOnInit
+por OnChanges, não esquecendo de deletar, o mesmo da lista de imports, lá no começo do código de photo.component.ts.
+Usando a interface OnChanges, quando clicamos em PhotosComponent, o VS não nos permite implementar o método em si, 
+mas se logo abaixo de constructor, nós digitarmos ngOnChanges(), ele nos dará a opção de adicionarmos 
+um método com este nome.
+
+Este método recebe como parâmetro todas as possíveis mudanças das inbound properties do nosso componente e tais
+mudanças são do tipo SimplesChanges, que iremos importar de angular/core e caso haja alguma mudança, 
+uma propriedade com mesmo nome da inboud property que sofreu a mudança será adicionada dinamicamente, caso Não
+houver mudança, tampouco haverá propriedade.
+
+Implementando um if para testar se caso houver mudanças especificamente na inbound Property photos, executaremos
+this.groupColumns() passando os novos dados das imagens.
+Estaremos testando com photos pois, poderemos ter várias propriedades, porém, apenas uma delas sofrerá alteração.
+É necessário testar cada propriedade da inbound property;
+
+export class PhotosComponent implements OnChanges {
+
+  @Input() photos: Photo[] = [];
+  rows: any[] = [];
+
+  constructor() { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes.photos) {
+        this.rows = this.groupColumns(this.photos);
+    }
+  }
+
+  groupColumns(photos: Photo[]){
+    const newRows = [];
+
+    for(let index = 0; index < photos.length; index+=3){
+      newRows.push(photos.slice(index, index + 3));
+    }
+
+    return newRows;
+
+  }
+
+}
+
+Ao salvar, podemos notar a alteração acontecendo, pois as imagens esatarão sendo exibidas.
+Ao inspecionar o DOM, é possível ver que teremos a <ol> com cada <li> contendo 3 <div>'s, 
+como era esperado, somente a última terá duas <div>, pois são somente duas fotos, resolvendo assim o 
+problema da questão da grid 
+
+
+10 O que aprendemos?
+
+ -> Tópicos abordados:
+     - Novo componente para listar photos
+     - Adequação dos dados recebidos pelo componente
+     - Quando a fase OnInit não é suficiente
+     - A interface OnChanges e como interagir com SimpleChanges

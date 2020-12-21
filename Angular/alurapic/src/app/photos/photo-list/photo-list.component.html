@@ -19,10 +19,7 @@
 
   img-thumbnail -> classe do bootstrap com caracteristicas responsivas.
 
+  associando a inbound photos a propriedade photos e essa é a que guarda as fotos que vieram do back end 
 -->
 
-<ap-photo 
-    *ngFor="let photo of photos" 
-    [url]="photo.url" 
-    [description]="photo.description">
-</ap-photo>
+<ap-photos [photos] = "photos"></ap-photos>

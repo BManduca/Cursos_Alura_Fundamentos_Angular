@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PhotoService } from '../photo/photo.service';
 import { ActivatedRoute } from '@angular/router';
+import { Photo } from '../photo/photo';
 
 @Component({
   selector: 'app-photo-list',
@@ -9,7 +10,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PhotoListComponent implements OnInit {
 
-  photos: any[] = [];
+  //lista do tipo Photo que inicia vazia
+  photos: Photo[] = [];
 
   /*
     código deixará de funcionar, pois, o photoService so funcionava no constructor
